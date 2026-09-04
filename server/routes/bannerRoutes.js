@@ -1,11 +1,11 @@
 import express from "express";
 import {
-  getBrands,
-  getBrandById,
-  createBrand,
-  updateBrand,
-  deleteBrand,
-} from "../controllers/brandController.js";
+  getBanners,
+  getBannerById,
+  createBanner,
+  updateBanner,
+  deleteBanner,
+} from "../controllers/bannerController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -13,19 +13,19 @@ const router = express.Router();
 /**
  * @swagger
  * tags:
- *   name: Brands
- *   description: Product brand management
+ *   name: Banners
+ *   description: Storefront banner management
  */
 
 /**
  * @swagger
- * /api/brands:
+ * /api/banners:
  *   get:
- *     summary: Get all brands
- *     tags: [Brands]
+ *     summary: Get all banners
+ *     tags: [Banners]
  *     responses:
  *       200:
- *         description: Brands retrieved successfully
+ *         description: Banners retrieved successfully
  *         content:
  *           application/json:
  *             schema:
@@ -34,6 +34,9 @@ const router = express.Router();
  *                 success:
  *                   type: boolean
  *                   example: true
+ *                 count:
+ *                   type: integer
+ *                   example: 3
  *                 data:
  *                   type: array
  *                   items:
@@ -43,13 +46,43 @@ const router = express.Router();
  *                         type: string
  *                       name:
  *                         type: string
- *                       logo:
+ *                       title:
  *                         type: string
- *                       description:
+ *                       startFrom:
+ *                         type: number
+ *                       image:
  *                         type: string
+ *                       bannerType:
+ *                         type: string
+ */
+router.get("/", getBanners);
+
+/**
+ * @swagger
+ * /api/banners/{id}:
+ *   get:
+ *     summary: Get a banner by ID
+ *     tags: [Banners]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Banner retrieved successfully
+ *       404:
+ *         description: Banner not found
+ */
+router.get("/:id", getBannerById);
+
+/**
+ * @swagger
+ * /api/banners:
  *   post:
- *     summary: Create a new brand
- *     tags: [Brands]
+ *     summary: Create a new banner
+ *     tags: [Banners]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -60,16 +93,24 @@ const router = express.Router();
  *             type: object
  *             required:
  *               - name
+ *               - title
+ *               - startFrom
+ *               - image
+ *               - bannerType
  *             properties:
  *               name:
  *                 type: string
- *               logo:
+ *               title:
  *                 type: string
- *               description:
+ *               startFrom:
+ *                 type: number
+ *               image:
+ *                 type: string
+ *               bannerType:
  *                 type: string
  *     responses:
  *       201:
- *         description: Brand created successfully
+ *         description: Banner created successfully
  *       400:
  *         description: Missing required fields
  *       401:
@@ -77,28 +118,14 @@ const router = express.Router();
  *       403:
  *         description: Forbidden - admin access required
  */
-router.route("/").get(getBrands).post(protect, admin, createBrand);
+router.post("/", protect, admin, createBanner);
 
 /**
  * @swagger
- * /api/brands/{id}:
- *   get:
- *     summary: Get a brand by ID
- *     tags: [Brands]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Brand retrieved successfully
- *       404:
- *         description: Brand not found
+ * /api/banners/{id}:
  *   put:
- *     summary: Update a brand
- *     tags: [Brands]
+ *     summary: Update a banner
+ *     tags: [Banners]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -116,22 +143,32 @@ router.route("/").get(getBrands).post(protect, admin, createBrand);
  *             properties:
  *               name:
  *                 type: string
- *               logo:
+ *               title:
  *                 type: string
- *               description:
+ *               startFrom:
+ *                 type: number
+ *               image:
+ *                 type: string
+ *               bannerType:
  *                 type: string
  *     responses:
  *       200:
- *         description: Brand updated successfully
+ *         description: Banner updated successfully
  *       401:
  *         description: Unauthorized - authentication required
  *       403:
  *         description: Forbidden - admin access required
  *       404:
- *         description: Brand not found
+ *         description: Banner not found
+ */
+router.put("/:id", protect, admin, updateBanner);
+
+/**
+ * @swagger
+ * /api/banners/{id}:
  *   delete:
- *     summary: Delete a brand
- *     tags: [Brands]
+ *     summary: Delete a banner
+ *     tags: [Banners]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -142,18 +179,14 @@ router.route("/").get(getBrands).post(protect, admin, createBrand);
  *           type: string
  *     responses:
  *       200:
- *         description: Brand deleted successfully
+ *         description: Banner deleted successfully
  *       401:
  *         description: Unauthorized - authentication required
  *       403:
  *         description: Forbidden - admin access required
  *       404:
- *         description: Brand not found
+ *         description: Banner not found
  */
-router
-  .route("/:id")
-  .get(getBrandById)
-  .put(protect, admin, updateBrand)
-  .delete(protect, admin, deleteBrand);
+router.delete("/:id", protect, admin, deleteBanner);
 
 export default router;
