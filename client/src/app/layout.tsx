@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Babyshop | Online shopping places",
-  description: "Babyshop for onlne shopping",
+  title: "Vattanac Brewery | Official Website",
+  description:
+    "Vattanac Brewery - Explore our brewery, products, brands, and latest updates.",
 };
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -12,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased`}>{children}</body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }
