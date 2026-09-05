@@ -80,7 +80,6 @@ export function StatsCard({
     </Card>
   );
 
-  // Make the whole card clickable only when href exists
   if (href) {
     return (
       <Link

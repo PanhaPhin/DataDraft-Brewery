@@ -163,7 +163,7 @@ const Sidebar = ({ open, setOpen }: SidebarProps) => {
             key={item.to}
             to={item.to}
             label={item.label || ""}
-            icon={item.icon}
+            icon={item.icon} 
             end={item.end}
             open={open}
           />
